@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Gabarito", cursive;
+}
+
+*::-webkit-scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  @apply bg-slate-600;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-blue-600 rounded;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+.my-smooth-transition-1 {
+  @apply transition duration-300 ease-in-out;
+}
+
+.my-hover-effect-1 {
+  @apply inline-block relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[2px] after:-bottom-2 after:left-0 after:bg-gradient-to-r from-yellow-600 to-appThemeYellow after:origin-bottom-right after:transition after:ease-out after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+}
+
+.my-truncate-lines-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3; /* Number of lines to truncate */
+  line-clamp: 3; /* Number of lines to truncate */
+  /* @apply text-justify */
+}
+
+@tailwind utilities;
