@@ -105,8 +105,8 @@ const Cart = () => {
           </p>
         </div>
         {cartItems.length > 0 ? (
-          <div className="flex gap-5">
-            <div className="w-2/3 space-y-4">
+          <div className="md:flex gap-5 space-y-5 md:space-y-0">
+            <div className="md:w-2/3 space-y-4">
               {cartItems?.map((item) => (
                 <div
                   className="bg-white p-2 flex items-center justify-center gap-4 shadow rounded-lg"
@@ -144,7 +144,7 @@ const Cart = () => {
               ))}
             </div>
 
-            <div className="bg-white w-1/3 p-5 shadow rounded-lg text-center">
+            <div className="bg-white md:w-1/3 p-5 shadow rounded-lg text-center">
               <h3 className="text-2xl">Cart Summary</h3>
               <p>Total | Checkout | Payment</p>
               <hr />

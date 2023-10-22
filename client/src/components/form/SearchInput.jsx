@@ -8,18 +8,21 @@ import { useSearchContext } from "../../context/SearchContextProvider";
 import { appConfig } from "../../config/appConfig";
 
 const SearchInput = () => {
-  const { values, setValues } = useSearchContext();
+  const { values, setValues, setIsSearhedProductLoading } = useSearchContext();
   const navigate = useNavigate();
 
   const handleFormOnSubmit = async (e) => {
     e.preventDefault();
+    setIsSearhedProductLoading(true);
     try {
       const { data } = await axios.get(
         `${appConfig.serverBaseUrl}/api/v1/product/search-product/${values?.keyword}`
       );
       setValues({ ...values, results: data });
       navigate("/search");
+      setIsSearhedProductLoading(false);
     } catch (error) {
+      setIsSearhedProductLoading(false);
       console.log(error);
     }
   };
@@ -27,7 +30,7 @@ const SearchInput = () => {
   return (
     <div>
       <form
-        className="flex items-center justify-center"
+        className="flex items-center justify-center hidden md:flex"
         role="search"
         onSubmit={handleFormOnSubmit}
       >
@@ -37,7 +40,7 @@ const SearchInput = () => {
           label="Search Product"
           color="yellow"
           name="values"
-          className="flex-1 text-white rounded-r-none"
+          className="text-white rounded-r-none"
           value={values?.keyword}
           onChange={(e) => setValues({ ...values, keyword: e.target.value })}
           autoComplete="true"

@@ -58,7 +58,7 @@ const Profile = () => {
 
   return (
     <Layout title={"Your Profile"}>
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         <UserMenu />
         <div className="w-full">
           <h3 className="inline-flex items-center gap-5 mb-5 text-appThemeDarkBlue text-2xl font-medium">
@@ -80,7 +80,6 @@ const Profile = () => {
                     name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    fullWidth
                     autoComplete="true"
                   />
                   <Input
@@ -91,7 +90,6 @@ const Profile = () => {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    fullWidth
                     autoComplete="true"
                     readOnly
                   />
@@ -103,7 +101,6 @@ const Profile = () => {
                     name="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    fullWidth
                     autoComplete="true"
                   />
                   <Input
@@ -114,7 +111,6 @@ const Profile = () => {
                     name="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    fullWidth
                     autoComplete="true"
                   />
                   <Input
@@ -125,14 +121,12 @@ const Profile = () => {
                     name="address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    fullWidth
                     autoComplete="true"
                   />
                 </div>
 
                 <Button
                   className="bg-appThemeDarkBlue mt-6 inline-flex items-center justify-center gap-2 hover:bg-appThemeBlue"
-                  fullWidth
                   type="submit"
                 >
                   Update <MdOutlineUpdate size={20} />

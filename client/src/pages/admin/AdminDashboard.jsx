@@ -7,7 +7,7 @@ const AdminDashboard = () => {
   const { auth } = useAuthContext();
   return (
     <Layout title={"Admin DashBoard -Ecommerce App"}>
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         <AdminMenu />
 
         <div className="bg-white w-full p-5 space-y-5 border rounded shadow-md">

@@ -9,17 +9,20 @@ import { AuthContextProvider } from "./context/AuthContextProvider";
 import "antd/dist/reset.css";
 import { SearchContextProvider } from "./context/SearchContextProvider";
 import { CartContextProvider } from "./context/CartContextProvider";
+import { CategoryContextProvider } from "./context/CategoryContextProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ThemeProvider>
     <AuthContextProvider>
       <SearchContextProvider>
-        <CartContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CartContextProvider>
+        <CategoryContextProvider>
+          <CartContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CartContextProvider>
+        </CategoryContextProvider>
       </SearchContextProvider>
     </AuthContextProvider>
   </ThemeProvider>

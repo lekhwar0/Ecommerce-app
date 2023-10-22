@@ -130,7 +130,7 @@ const UpdateProduct = () => {
 
   return (
     <Layout title={"DashBoard - Create Product"}>
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         <AdminMenu />
 
         <div className="w-full space-y-2">

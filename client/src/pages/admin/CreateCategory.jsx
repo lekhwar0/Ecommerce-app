@@ -28,6 +28,7 @@ const CreateCategory = () => {
   const [openEditCategoryModal, setOpenEditCategoryModal] = useState(false);
 
   const [openDeleteCategoryModal, setOpenDeleteCategoryModal] = useState(false);
+  const [isAllCategoriesLoading, setIsAllCategoriesLoading] = useState(false);
 
   //handle create new category form
   const handleFormOnSubmit = async (e) => {
@@ -97,15 +98,18 @@ const CreateCategory = () => {
 
   //get all cat
   const getAllCategory = async () => {
+    setIsAllCategoriesLoading(true);
     try {
       const { data } = await axios.get(
         `${appConfig.serverBaseUrl}/api/v1/category/all-categories`
       );
       if (data?.success) {
         setCategories(data?.category);
+        setIsAllCategoriesLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setIsAllCategoriesLoading(false);
       toast.error("something went wrong in getting category");
     }
   };
@@ -118,7 +122,7 @@ const CreateCategory = () => {
 
   return (
     <Layout title={"DashBoard - Create Category"}>
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         <AdminMenu />
 
         <div className="w-full">
@@ -139,9 +143,9 @@ const CreateCategory = () => {
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
-                  {categoriesTableHead?.map((head) => (
+                  {categoriesTableHead?.map((head, index) => (
                     <th
-                      key={head}
+                      key={index}
                       className="bg-gray-200 border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                     >
                       <Typography
@@ -156,52 +160,70 @@ const CreateCategory = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories?.map((category, index) => {
-                  const isLastRow = index === categories?.length - 1;
-                  const classes = isLastRow
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+                {!isAllCategoriesLoading
+                  ? categories?.map((category, index) => {
+                      const isLastRow = index === categories?.length - 1;
+                      const classes = isLastRow
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50";
 
-                  return (
-                    <tr key={category?._id}>
-                      <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal capitalize"
-                        >
-                          {category?.name}
-                        </Typography>
-                      </td>
+                      return (
+                        <tr key={category?._id}>
+                          <td className={classes}>
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal capitalize"
+                            >
+                              {category?.name}
+                            </Typography>
+                          </td>
 
-                      <td className={`${classes} space-x-2`}>
-                        <Button
-                          className="my-smooth-transition-1 bg-appThemeBlue px-5 py-2 inline-flex items-center gap-2 text-white font-medium rounded-md hover:bg-appThemeDarkBlue"
-                          onClick={() => {
-                            setOpenEditCategoryModal(
-                              () => !openEditCategoryModal
-                            );
-                            setUpdatedName(category?.name);
-                            setSelectedCategory(category);
-                          }}
-                        >
-                          Edit <BiSolidEditAlt />
-                        </Button>
-                        <Button
-                          className="my-smooth-transition-1 bg-red-500 px-5 py-2 inline-flex items-center gap-2 text-white font-medium rounded-md hover:bg-appThemeDarkBlue"
-                          onClick={() => {
-                            setOpenDeleteCategoryModal(
-                              () => !openDeleteCategoryModal
-                            );
-                            setSelectedCategory(category);
-                          }}
-                        >
-                          Delete <RiDeleteBin6Fill />
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                          <td className={`${classes} space-x-2`}>
+                            <Button
+                              className="my-smooth-transition-1 bg-appThemeBlue px-5 py-2 inline-flex items-center gap-2 text-white font-medium rounded-md hover:bg-appThemeDarkBlue"
+                              onClick={() => {
+                                setOpenEditCategoryModal(
+                                  () => !openEditCategoryModal
+                                );
+                                setUpdatedName(category?.name);
+                                setSelectedCategory(category);
+                              }}
+                            >
+                              Edit <BiSolidEditAlt />
+                            </Button>
+                            <Button
+                              className="my-smooth-transition-1 bg-red-500 px-5 py-2 inline-flex items-center gap-2 text-white font-medium rounded-md hover:bg-appThemeDarkBlue"
+                              onClick={() => {
+                                setOpenDeleteCategoryModal(
+                                  () => !openDeleteCategoryModal
+                                );
+                                setSelectedCategory(category);
+                              }}
+                            >
+                              Delete <RiDeleteBin6Fill />
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : Array(4)
+                      .fill()
+                      .map((_, index) => (
+                        <div className="p-4" key={index}>
+                          <div className="animate-pulse flex space-x-4">
+                            <div className="flex-1 py-1">
+                              <div className="grid grid-cols-2 gap-32">
+                                <div className="h-2 bg-slate-400 rounded"></div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="h-8 bg-slate-400 rounded"></div>
+                                  <div className="h-8 bg-slate-400 rounded"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
               </tbody>
             </table>
           </Card>
@@ -248,9 +270,6 @@ const CreateCategory = () => {
             <Button
               variant="gradient"
               color="green"
-              // onClick={() => {
-              //   setOpenDeleteCategoryModal(() => !openDeleteCategoryModal);
-              // }}
               onClick={handleDeleteCategoryOnClick}
             >
               <span>Confirm</span>

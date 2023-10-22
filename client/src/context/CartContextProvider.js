@@ -5,10 +5,12 @@ const cartContext = createContext();
 
 const CartContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-
   const [orders, setOrders] = useState([]);
 
+  const [isOrdersLoading, setIsOrdersLoading] = useState(false);
+
   const getOrders = async () => {
+    setIsOrdersLoading(true);
     try {
       const { data } = await axios.get(
         `${appConfig.serverBaseUrl}/api/v1/auth/get-orders`
@@ -22,8 +24,10 @@ const CartContextProvider = ({ children }) => {
           }
         }
         setOrders(data);
+        setIsOrdersLoading(false);
       }
     } catch (error) {
+      setIsOrdersLoading(false);
       console.log(error);
     }
   };
@@ -36,7 +40,14 @@ const CartContextProvider = ({ children }) => {
 
   return (
     <cartContext.Provider
-      value={{ cartItems, setCartItems, orders, setOrders, getOrders }}
+      value={{
+        cartItems,
+        setCartItems,
+        orders,
+        setOrders,
+        getOrders,
+        isOrdersLoading,
+      }}
     >
       {children}
     </cartContext.Provider>

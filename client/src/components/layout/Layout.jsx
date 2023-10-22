@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 const Layout = ({ children, title, description, keywords, author }) => {
   return (
-    <div className="2xl:container mx-auto">
+    <div className="container mx-auto">
       <Helmet>
         <meta charset="utf-8" />
         <meta name="description" content={description} />
@@ -15,9 +15,7 @@ const Layout = ({ children, title, description, keywords, author }) => {
         <title>{title}</title>
       </Helmet>
       <Header />
-      <main className="min-h-screen bg-slate-100 px-5 py-10">
-        <h3>{children}</h3>
-      </main>
+      <main className="min-h-screen bg-slate-100 px-5 py-10">{children}</main>
       <Footer />
     </div>
   );

@@ -8,10 +8,10 @@ const Dashboard = () => {
 
   return (
     <Layout title="Dashboard - Ecommerce App">
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         <UserMenu />
 
-        <div className="bg-white w-full p-5 space-y-5 border rounded shadow-md">
+        <div className="bg-white w-full p-5 space-y-5 border rounded-lg shadow-md">
           <h3 className="text-appThemeDarkBlue text-2xl font-medium">
             User Name : {auth?.user?.name}
           </h3>

@@ -9,13 +9,17 @@ import {
   Typography,
   Button,
   Carousel,
+  Drawer,
+  IconButton,
+  Input,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { BsFillCartPlusFill } from "react-icons/bs";
-import { AiOutlineReload } from "react-icons/ai";
+import { AiOutlineReload, AiOutlineSearch } from "react-icons/ai";
 import { Checkbox, Radio } from "antd";
 import { BiReset } from "react-icons/bi";
 import { MdExpandMore } from "react-icons/md";
+import { IoFilterSharp } from "react-icons/io5";
 
 import Layout from "../components/layout/Layout";
 import { appConfig } from "../config/appConfig";
@@ -27,6 +31,7 @@ import carousel_3 from "../images/props/carousel_3.jpg";
 import carousel_4 from "../images/props/carousel_4.jpg";
 import carousel_5 from "../images/props/carousel_5.jpg";
 import carousel_6 from "../images/props/carousel_6.jpg";
+import { useSearchContext } from "../context/SearchContextProvider";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -39,8 +44,15 @@ const HomePage = () => {
 
   const [totalProduct, setTotalProduct] = useState(0);
   const [page, setPage] = useState(1);
+
+  const { values, setValues, setIsSearhedProductLoading } = useSearchContext();
+
   const [loading, setLoading] = useState(false);
   const [isProductsLoading, setIsProductsLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const openDrawer = () => setOpen(true);
+  const closeDrawer = () => setOpen(false);
 
   const handleFilterOnCheck = async (value, id) => {
     setIsProductsLoading(true);
@@ -138,6 +150,23 @@ const HomePage = () => {
     }
   };
 
+  //search product
+  const handleSearchProductOnSubmitForm = async (e) => {
+    e.preventDefault();
+    setIsSearhedProductLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${appConfig.serverBaseUrl}/api/v1/product/search-product/${values?.keyword}`
+      );
+      setValues({ ...values, results: data });
+      navigate("/search");
+      setIsSearhedProductLoading(false);
+    } catch (error) {
+      setIsSearhedProductLoading(false);
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllCategory();
     getTotalProducts();
@@ -161,8 +190,8 @@ const HomePage = () => {
 
   return (
     <Layout title={"All Produts - Best offers"}>
-      <div className="flex gap-6">
-        <div className="w-1/6 pr-5 text-left border-r border-r-gray-200 space-y-6">
+      <div className="md:flex gap-6">
+        <div className="md:w-1/6 pr-5 text-left border-r border-r-gray-200 space-y-6 hidden md:block">
           <div>
             <h5 className="text-lg font-medium">Filter by Category</h5>
             {categories?.map((c, index) => (
@@ -199,7 +228,118 @@ const HomePage = () => {
             </Button>
           </div>
         </div>
-        <div className="w-5/6">
+        <div className="flex md:hidden">
+          <div className="mb-5 flex justify-center items-center gap-2">
+            <Button
+              onClick={openDrawer}
+              className="w-fit bg-appThemeDarkBlue hover:bg-appThemeBlue hover:text-appThemeYellow"
+            >
+              <IoFilterSharp size={20} />
+            </Button>
+            <form
+              className="flex items-center justify-center"
+              role="search"
+              onSubmit={handleSearchProductOnSubmitForm}
+            >
+              <Input
+                type="text"
+                size="lg"
+                label="Search Product"
+                color="blue"
+                name="values"
+                className="bg-gray-400 text-appThemeDarkBlue rounded-r-none"
+                value={values?.keyword}
+                onChange={(e) =>
+                  setValues({ ...values, keyword: e.target.value })
+                }
+                autoComplete="true"
+                labelProps={{ className: "text-white" }}
+              />
+
+              <Button
+                className="w-fit bg-appThemeDarkBlue inline-flex items-center justify-center gap-2 hover:text-appThemeDarkBlue hover:bg-appThemeYellow rounded-l-none border border-l-0 border-white"
+                type="submit"
+              >
+                <AiOutlineSearch size={20} />
+              </Button>
+            </form>
+          </div>
+          <Drawer
+            open={open}
+            onClose={closeDrawer}
+            className="p-4 hover:text-red-500"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <Typography
+                variant="h5"
+                className="text-lg text-black font-medium"
+              >
+                Filters
+              </Typography>
+              <IconButton
+                variant="text"
+                color="blue-gray"
+                onClick={closeDrawer}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </IconButton>
+            </div>
+
+            <div>
+              <h5 className="text-lg text-appThemeDarkBlue font-medium">
+                Filter by Category
+              </h5>
+              {categories?.map((c, index) => (
+                <Checkbox
+                  key={index}
+                  onChange={(e) => {
+                    handleFilterOnCheck(e.target.checked, c?._id);
+                  }}
+                  className="flex"
+                >
+                  {c?.name}
+                </Checkbox>
+              ))}
+            </div>
+            {/* { price filter */}
+            <div>
+              <h5 className="mt-5 text-lg text-appThemeDarkBlue font-medium">
+                Filter by Price
+              </h5>
+              <Radio.Group onChange={(e) => setRadioPrice(e.target.value)}>
+                {Prices?.map((price, index) => (
+                  <div key={index}>
+                    <Radio value={price?.array}>{price?.name}</Radio>
+                  </div>
+                ))}
+              </Radio.Group>
+            </div>
+
+            <div>
+              <Button
+                className="bg-transparent mt-5 flex items-center justify-center gap-1 text-red-500 text-center border border-red-500 hover:text-white hover:bg-red-500"
+                onClick={() => window.location.reload()}
+              >
+                Reset filter
+                <BiReset size={20} />
+              </Button>
+            </div>
+          </Drawer>
+        </div>
+        <div className="w-full">
           <div className="w-full">
             <Carousel
               transition={{ duration: 2 }}
@@ -216,7 +356,7 @@ const HomePage = () => {
           </div>
           {!isProductsLoading ? (
             <div>
-              <div className="-mt-36 grid grid-cols-4 gap-5">
+              <div className="mt-5 md:-mt-36 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                 {products?.map((p, index) => (
                   <Card key={index}>
                     <CardHeader shadow={false} floated={false} className="h-44">
@@ -289,103 +429,35 @@ const HomePage = () => {
               </div>
             </div>
           ) : (
-            <div className="mt-6 grid grid-cols-4 gap-5">
-              <div className="bg-white p-4 shadow rounded-md">
-                <div className="animate-pulse flex space-x-4">
-                  <div className="flex-1 space-y-6 py-1">
-                    <div className="space-y-8">
-                      <div>
-                        <div className="bg-slate-400 h-44 rounded-md"></div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-8">
-                        <div className="h-2 bg-slate-400 rounded col-span-2"></div>
-                        <div className="h-2 bg-slate-400 rounded col-span-1"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-md p-4">
-                <div className="animate-pulse flex space-x-4">
-                  <div className="flex-1 space-y-6 py-1">
-                    <div className="space-y-8">
-                      <div>
-                        <div className="bg-slate-400 h-44 rounded-md"></div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-8">
-                        <div className="h-2 bg-slate-400 rounded col-span-2"></div>
-                        <div className="h-2 bg-slate-400 rounded col-span-1"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
+            <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {Array(4)
+                .fill()
+                .map((_, index) => (
+                  <div className="bg-white p-4 shadow rounded-md" key={index}>
+                    <div className="animate-pulse flex space-x-4">
+                      <div className="flex-1 space-y-6 py-1">
+                        <div className="space-y-8">
+                          <div>
+                            <div className="bg-slate-400 h-44 rounded-md"></div>
+                          </div>
+                          <div className="grid grid-cols-3 gap-8">
+                            <div className="h-2 bg-slate-400 rounded col-span-2"></div>
+                            <div className="h-2 bg-slate-400 rounded col-span-1"></div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-2 bg-slate-400 rounded"></div>
+                            <div className="h-2 bg-slate-400 rounded"></div>
+                            <div className="h-2 bg-slate-400 rounded"></div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="bg-slate-400 h-8 rounded-md"></div>
+                            <div className="bg-slate-400 h-8 rounded-md"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-md p-4">
-                <div className="animate-pulse flex space-x-4">
-                  <div className="flex-1 space-y-6 py-1">
-                    <div className="space-y-8">
-                      <div>
-                        <div className="bg-slate-400 h-44 rounded-md"></div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-8">
-                        <div className="h-2 bg-slate-400 rounded col-span-2"></div>
-                        <div className="h-2 bg-slate-400 rounded col-span-1"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-md p-4">
-                <div className="animate-pulse flex space-x-4">
-                  <div className="flex-1 space-y-6 py-1">
-                    <div className="space-y-8">
-                      <div>
-                        <div className="bg-slate-400 h-44 rounded-md"></div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-8">
-                        <div className="h-2 bg-slate-400 rounded col-span-2"></div>
-                        <div className="h-2 bg-slate-400 rounded col-span-1"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                        <div className="h-2 bg-slate-400 rounded"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                        <div className="bg-slate-400 h-8 rounded-md"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                ))}
             </div>
           )}
         </div>
