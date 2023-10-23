@@ -229,25 +229,25 @@ const HomePage = () => {
           </div>
         </div>
         <div className="flex md:hidden">
-          <div className="mb-5 flex justify-center items-center gap-2">
-            <Button
+          <div className="w-full mb-5 flex justify-center items-center">
+            <button
               onClick={openDrawer}
-              className="w-fit bg-appThemeDarkBlue hover:bg-appThemeBlue hover:text-appThemeYellow"
+              className="bg-appThemeDarkBlue py-2.5 px-1 text-white hover:bg-appThemeBlue hover:text-appThemeYellow rounded"
             >
               <IoFilterSharp size={20} />
-            </Button>
+            </button>
             <form
-              className="flex items-center justify-center"
+              className="w-full flex items-center justify-center"
               role="search"
               onSubmit={handleSearchProductOnSubmitForm}
             >
               <Input
                 type="text"
-                size="lg"
+                size="md"
                 label="Search Product"
                 color="blue"
                 name="values"
-                className="bg-gray-400 text-appThemeDarkBlue rounded-r-none"
+                className="bg-gray-600 text-appThemeDarkBlue rounded-r-none"
                 value={values?.keyword}
                 onChange={(e) =>
                   setValues({ ...values, keyword: e.target.value })
@@ -256,12 +256,12 @@ const HomePage = () => {
                 labelProps={{ className: "text-white" }}
               />
 
-              <Button
-                className="w-fit bg-appThemeDarkBlue inline-flex items-center justify-center gap-2 hover:text-appThemeDarkBlue hover:bg-appThemeYellow rounded-l-none border border-l-0 border-white"
+              <button
+                className="bg-appThemeDarkBlue py-2.5 px-1 text-white inline-flex items-center justify-center gap-2 hover:text-appThemeDarkBlue hover:bg-appThemeYellow rounded-l-none border border-l-0 border-white rounded"
                 type="submit"
               >
                 <AiOutlineSearch size={20} />
-              </Button>
+              </button>
             </form>
           </div>
           <Drawer

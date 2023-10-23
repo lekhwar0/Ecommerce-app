@@ -68,11 +68,11 @@ const SingleProductDetails = () => {
       </NavLink>
       <div className="space-y-5">
         <div className="lg:flex gap-4">
-          <div className="lg:w-1/2 px-8 border-r">
+          <div className="lg:w-1/2 px-8 pb-4 lg:pb-0 border-b lg:border-b-0 lg:border-r">
             <img
               src={`${appConfig.serverBaseUrl}/api/v1/product/product-photo/${product?._id}`}
               alt={product?.name + " - Product Image"}
-              className="object-cover"
+              className="rounded-lg shadow object-cover"
             />
           </div>
           <div className="lg:w-1/2 px-3">
@@ -82,14 +82,14 @@ const SingleProductDetails = () => {
             {!isSingleProductLoading ? (
               <div>
                 <h2 className="font-medium"> {product?.category?.name}</h2>
-                <h2 className="text-appThemeDarkBlue text-2xl font-medium capitalize">
+                <h2 className="text-appThemeDarkBlue text-2xl lg:text-3xl font-medium capitalize">
                   {product?.name}
                 </h2>
-                <p className="text-3xl text-slate-800">
+                <p className="text-md lg:text-xl text-slate-800 text-justify">
                   {" "}
                   {product?.description}
                 </p>
-                <h2 className="text-red-600 text-3xl font-medium">
+                <h2 className="text-red-600 text-2xl lg:text-3xl font-medium">
                   {" "}
                   $ {product?.price}
                 </h2>

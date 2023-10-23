@@ -166,7 +166,7 @@ const Header = () => {
       <div className="px-5 pt-2 flex justify-between items-center">
         <NavLink
           to="/"
-          className="inline-flex items-center gap-2 text-appThemeYellow text-2xl font-bold"
+          className="pb-3 inline-flex items-center gap-2 text-appThemeYellow text-2xl font-bold"
         >
           <FaShopify /> Ecommerce App
         </NavLink>

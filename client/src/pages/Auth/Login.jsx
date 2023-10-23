@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -91,25 +85,7 @@ const Login = () => {
               autoComplete="true"
             />
           </div>
-          <Checkbox
-            color="blue"
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-              >
-                I agree the
-                {/* <a
-                  href="/signup"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </a> */}
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
+
           <Button
             className="bg-appThemeDarkBlue mt-6 inline-flex items-center justify-center gap-2 hover:bg-appThemeBlue"
             fullWidth
